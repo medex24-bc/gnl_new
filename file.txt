@@ -1,4 +1,4 @@
-Lorem ipsum odor amet, consectetuer adipiscing elit. Magna sed faucibus convallis venenatis vel turpis elementum pharetra torquent.\n 
+Lorem ipsum odor amet, consectetuer adipiscing elit. Magna sed faucibus convallis venenatis vel turpis elementum pharetra torquent.
 Ultrices ultrices vitae nostra, natoque ornare bibendum at. Nibh augue feugiat semper eget natoque nostra sagittis nostra eros. Quis duis est 
 mattis; nec hac curae id. Neque venenatis blandit eleifend rutrum, ultrices pretium ut. Auctor magna phasellus tristique montes nostra pharetra. 
 Arcu efficitur cras purus felis, placerat ante. Condimentum arcu eget gravida egestas iaculis?
@@ -24,18 +24,3 @@ Convallis venenatis luctus proin eleifend pulvinar class fermentum mus. Sollicit
  laoreet primis maecenas. Libero etiam aptent duis malesuada nulla condimentum scelerisque urna. Fermentum vitae class et vitae
   ipsum dolor dictumst metus justo. Pretium ad mattis felis ultricies lectus. Luctus potenti tempor leo erat tincidunt. Lobortis 
   volutpat habitant laoreet ligula, tortor erat natoque.
-
-
-
-
-salut les amis 
-comment cv cv tres bien merci 0eijwf wefwef
-
-read(fd, buf, 24)
-
-buf[comment cv cv tres bien merci 0eijwf wefwef]
-
-wefwef
-output
-salut les amis
-comment cv cv tres bien merci 0eijwf 

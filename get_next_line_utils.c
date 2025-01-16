@@ -1,30 +1,26 @@
 #include "get_next_line.h"
 
-// nous servira pour connaitre la taille a malloc etc
-size_t  ft_strlen(const char *s)
+// Pour garder tmp au chaud
+char    *ft_strdup(const char *s)
 {
-        int     i;
+        char    *new_string;
+        int             i;
+        int             len;
 
         i = 0;
-        while (s[i])
-                i++;
-        return (i);
-}
-
-// je lutilise dans ma fonction strjoin
-void    *ft_memcpy(void *dst, const void *src, size_t n)
-{
-        size_t  i;
-
-        i = 0;
-        if (dst == NULL && src == NULL)
+        len = ft_strlen(s);
+        if (s == NULL)
                 return (NULL);
-        while (i < n)
+        new_string = (char *)malloc(len + 1);
+        if (new_string == NULL)
+                return (NULL);
+        while (s[i])
         {
-                ((unsigned char *)dst)[i] = ((unsigned char *)src)[i];
+                new_string[i] = s[i];
                 i++;
         }
-        return (dst);
+        new_string[i] = '\0';
+        return (new_string);
 }
 
 // va servir a update notre variable static tmp, a retirer la phrase pour le 
@@ -52,6 +48,22 @@ char    *ft_substr(char const *s, unsigned int start, size_t len)
         }
         final_string[i] = '\0';
         return (final_string);
+}
+
+// je lutilise dans ma fonction strjoin
+void    *ft_memcpy(void *dst, const void *src, size_t n)
+{
+        size_t  i;
+
+        i = 0;
+        if (dst == NULL && src == NULL)
+                return (NULL);
+        while (i < n)
+        {
+                ((unsigned char *)dst)[i] = ((unsigned char *)src)[i];
+                i++;
+        }
+        return (dst);
 }
 
 // servir a join (copier) le buff dans le tmp

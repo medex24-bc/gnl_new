@@ -1,4 +1,4 @@
-#include "get_next_line.h"
+#include "get_next_line_bonus.h"
 
 // servir a chercher le carcatere '\n' pour savoir si on retourne la string ou pas
 char	*ft_strchr(char *s, int c)
@@ -30,7 +30,7 @@ int	ft_return_position(char *str, char c)
 	return (-1);
 }
 
-char	*get_next_line(int fd)
+static	char	*get_next_line(int fd)
 {
 	static char *tmp;
 	char		buff[BUFFER_SIZE + 1];
@@ -83,22 +83,53 @@ char	*get_next_line(int fd)
 }
 
 
-/*int main(void)
+int main(void)
 {
-    int	fd = 0;
+    int	fd1 = 0;
+	int fd2 = 0;
+	int fd3 = 0;
 	char *string = NULL;
 
-    fd = open("./files/file.txt", O_RDONLY);
-    if (fd == -1)
+    fd1 = open("./files/file1.txt", O_RDONLY);
+	fd2 = open("./files/file2.txt", O_RDONLY);
+	fd3 = open("./files/file3.txt", O_RDONLY);
+	if (fd1 != -1)
+	{
+		string = get_next_line(fd1);
+		printf("%s", string);
+	}
+	if (fd2 != -1)
+	{
+		string = get_next_line(fd2);
+		printf("%s", string);
+	}
+	if (fd3 != -1)
+	{
+		string = get_next_line(fd3);
+		printf("%s", string);
+	}
+
+/// DEUXIEME FOIS
+
+	if (fd1 != -1)
+	{
+		string = get_next_line(fd1);
+		printf("%s", string);
+	}
+	if (fd2 != -1)
+	{
+		string = get_next_line(fd2);
+		printf("%s", string);
+	}
+	if (fd3 != -1)
+	{
+		string = get_next_line(fd3);
+		printf("%s", string);
+	}
+	else
 	{
 		printf("Erreur d'ouverture du fichier\n");
         return (1);
 	}
-	string = get_next_line(fd);
-	while (string != NULL)
-	{
-		printf("%s", string);
-		string = get_next_line(fd);
-	}
 	return (0);
-}*/
+}

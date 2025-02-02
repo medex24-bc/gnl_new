@@ -15,37 +15,22 @@ char	*ft_strchr(char *s, int c)
 	return (NULL);
 }
 
-int	ft_return_position(char *str, char c)
-{
-	int	i;
-
-	i = 0;
-	while (str[i])
-	{
-		if (str[i] == c)
-			return (i);
-		i++;
-	}
-	return (-1);
-}
-
-/*char	*ft_free(char *tmp, ssize_t read_bytes, char *final_string)
+char	*ft_free(char *tmp, ssize_t read_bytes, char *final_string)
 {
 	if (tmp && *tmp && read_bytes == 0)
-    {
-        final_string = ft_strdup(tmp);
-        free(tmp);
-        tmp = NULL;
-        return (final_string);
-    }
+	{
+		final_string = ft_strdup(tmp);
+		free(tmp);
+		tmp = NULL;
+		return (final_string);
+	}
 	free(tmp);
-	tmp = NULL;
 	return (NULL);
-}*/
+}
 
 char	*ft_verify(char *str, char *buff, int read_bytes)
 {
-	char		*ptr_free;
+	char	*ptr_free;
 
 	ptr_free = NULL;
 	buff[read_bytes] = '\0';
@@ -64,42 +49,42 @@ char	*ft_verify(char *str, char *buff, int read_bytes)
 	return (str);
 }
 
+char	*ft_extract(char *tmp)
+{
+	char	*keep_tmp;
+
+	keep_tmp = ft_strdup(ft_strchr(tmp, '\n') + 1);
+	free(tmp);
+	tmp = keep_tmp;
+	return (tmp);
+}
+
 char	*get_next_line(int fd)
 {
-	static char *tmp;
-	char		*keep_tmp;
+	static char	*tmp;
 	char		buff[BUFFER_SIZE + 1];
 	char		*final_string;
 	ssize_t		read_bytes;
 
-	keep_tmp = NULL;
 	final_string = NULL;
 	read_bytes = 1;
 	while (read_bytes != 0)
 	{
-		if ((ft_strchr(tmp,'\n') != NULL))
+		if ((ft_strchr(tmp, '\n') != NULL))
 		{
-			final_string = ft_substr(tmp, 0, ft_return_position(tmp, '\n') + 1);
-			keep_tmp = ft_strdup(ft_strchr(tmp, '\n') + 1);
-			free(tmp);
-			tmp = keep_tmp;
+			final_string = ft_substr(tmp, 0, (ft_strlen(tmp)
+						- ft_strlen(ft_strchr(tmp, '\n'))) + 1);
+			tmp = ft_extract(tmp);
 			return (final_string);
 		}
 		read_bytes = read(fd, buff, BUFFER_SIZE);
 		if (read_bytes <= 0)
-			break;
+			break ;
 		tmp = ft_verify(tmp, buff, read_bytes);
 	}
-	if (tmp && *tmp && read_bytes == 0)
-    {
-        final_string = ft_strdup(tmp);
-        free(tmp);
-        tmp = NULL;
-        return (final_string);
-    }
-	free(tmp);
+	final_string = ft_free(tmp, read_bytes, final_string);
 	tmp = NULL;
-	return (NULL); // retour de la derniere ligne sans new line
+	return (final_string);
 }
 
 /*int main(void)

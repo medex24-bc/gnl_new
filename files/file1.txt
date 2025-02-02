@@ -1,1 +1,19 @@
-salut comment cv
+Lorem ipsum dolor sit amet, consectetur adipiscing elit. 
+Vestibulum accumsan arcu et nulla volutpat, ut gravida massa faucibus. 🌍🚀 
+1234567890!@#$%^&*()_+[]{}|;:',.<>?/~` 
+"Le ciel est bleu," dit-elle. Mais... est-il vraiment bleu?
+
+- Un, deux, trois...
+- Quatre, cinq, six...
+
+███████ ████████ ███████
+Ligne super longue pour tester la gestion des buffers et voir si get_next_line arrive à bien découper les morceaux sans perdre de caractères au passage. Ceci est une phrase vraiment longue qui ne devrait pas tenir en un seul buffer, voyons comment ton implémentation réagit face à ça !
+
+Ligne vide ci-dessous 👇
+
+   
+Et maintenant un retour à la ligne après juste un mot.  
+TEST  
+Un caractère seul: X  
+EOF juste après cette ligne.
+

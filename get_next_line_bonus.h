@@ -10,7 +10,7 @@
 #include <stdlib.h> // pour free() & malloc
 #include <unistd.h> // pour read()
 
-static char	*get_next_line(int fd);
+char	*get_next_line(int fd);
 char	*ft_strjoin(char *s1, char *s2);
 int		ft_return_position(char *str, char c);
 size_t  ft_strlcpy(char *dst, char *src, size_t size);

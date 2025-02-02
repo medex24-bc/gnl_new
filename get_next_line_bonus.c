@@ -30,7 +30,7 @@ int	ft_return_position(char *str, char c)
 	return (-1);
 }
 
-static	char	*get_next_line(int fd)
+char	*get_next_line(int fd)
 {
 	static char *tmp;
 	char		buff[BUFFER_SIZE + 1];
@@ -50,12 +50,10 @@ static	char	*get_next_line(int fd)
 			tmp = keep_tmp;
 			return (final_string);
 		}
-
 		read_bytes = read(fd, buff, BUFFER_SIZE);
 		if (read_bytes <= 0)
 			break;
 		buff[read_bytes] = '\0';
-
 		if (tmp)
 		{
 			ptr_free = ft_strdup(tmp);
@@ -69,7 +67,6 @@ static	char	*get_next_line(int fd)
 			tmp = ft_strdup(buff);
 		}
 	}
-	
 	if (tmp && *tmp && read_bytes == 0)
     {
         final_string = ft_strdup(tmp);
@@ -83,7 +80,7 @@ static	char	*get_next_line(int fd)
 }
 
 
-int main(void)
+/*int main(void)
 {
     int	fd1 = 0;
 	int fd2 = 0;
@@ -132,4 +129,4 @@ int main(void)
         return (1);
 	}
 	return (0);
-}
+}*/

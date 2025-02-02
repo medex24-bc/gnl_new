@@ -1,6 +1,5 @@
 #include "get_next_line.h"
 
-// servir a chercher le carcatere '\n' pour savoir si on retourne la string ou pas
 char	*ft_strchr(char *s, int c)
 {
 	if (!s && c != '\0')
@@ -30,15 +29,51 @@ int	ft_return_position(char *str, char c)
 	return (-1);
 }
 
+/*char	*ft_free(char *tmp, ssize_t read_bytes, char *final_string)
+{
+	if (tmp && *tmp && read_bytes == 0)
+    {
+        final_string = ft_strdup(tmp);
+        free(tmp);
+        tmp = NULL;
+        return (final_string);
+    }
+	free(tmp);
+	tmp = NULL;
+	return (NULL);
+}*/
+
+char	*ft_verify(char *str, char *buff, int read_bytes)
+{
+	char		*ptr_free;
+
+	ptr_free = NULL;
+	buff[read_bytes] = '\0';
+	if (str)
+	{
+		ptr_free = ft_strdup(str);
+		free(str);
+		str = ft_strjoin(ptr_free, buff);
+		free(ptr_free);
+	}
+	else if (!str)
+	{
+		free(str);
+		str = ft_strdup(buff);
+	}
+	return (str);
+}
+
 char	*get_next_line(int fd)
 {
 	static char *tmp;
+	char		*keep_tmp;
 	char		buff[BUFFER_SIZE + 1];
-	char		*keep_tmp = NULL;
-	char		*final_string = NULL;
+	char		*final_string;
 	ssize_t		read_bytes;
-	char		*ptr_free = NULL;
 
+	keep_tmp = NULL;
+	final_string = NULL;
 	read_bytes = 1;
 	while (read_bytes != 0)
 	{
@@ -50,26 +85,11 @@ char	*get_next_line(int fd)
 			tmp = keep_tmp;
 			return (final_string);
 		}
-
 		read_bytes = read(fd, buff, BUFFER_SIZE);
 		if (read_bytes <= 0)
 			break;
-		buff[read_bytes] = '\0';
-
-		if (tmp)
-		{
-			ptr_free = ft_strdup(tmp);
-			free(tmp);
-			tmp = ft_strjoin(ptr_free, buff);
-			free(ptr_free);
-		}
-		else if (!tmp)
-		{
-			free(tmp);
-			tmp = ft_strdup(buff);
-		}
+		tmp = ft_verify(tmp, buff, read_bytes);
 	}
-	
 	if (tmp && *tmp && read_bytes == 0)
     {
         final_string = ft_strdup(tmp);
@@ -82,14 +102,13 @@ char	*get_next_line(int fd)
 	return (NULL); // retour de la derniere ligne sans new line
 }
 
-
 /*int main(void)
 {
-    int	fd = 0;
+	int	fd = 0;
 	char *string = NULL;
 
-    fd = open("./files/file.txt", O_RDONLY);
-    if (fd == -1)
+	fd = open("./files/file1.txt", O_RDONLY);
+	if (fd == -1)
 	{
 		printf("Erreur d'ouverture du fichier\n");
         return (1);

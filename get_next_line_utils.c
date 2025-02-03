@@ -1,4 +1,5 @@
 #include "get_next_line.h"
+
 // nous servira pour connaitre la taille a malloc etc
 size_t	ft_strlen(char *s)
 {
@@ -95,3 +96,6 @@ char	*ft_strjoin(char *s1, char *s2)
 	final_string[ft_strlen(s1) + ft_strlen(s2)] = '\0';
 	return (final_string);
 }
+
+
+

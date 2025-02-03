@@ -10,6 +10,12 @@
 #include <stdlib.h> // pour free() & malloc
 #include <unistd.h> // pour read()
 
+typedef struct s_gnl{
+	int fd;
+	char buff[BUFFER_SIZE];
+	struct s_gnl *next;
+} t_gnl;
+
 char	*get_next_line(int fd);
 char	*ft_strjoin(char *s1, char *s2);
 int		ft_return_position(char *str, char c);

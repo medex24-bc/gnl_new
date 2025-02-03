@@ -1,86 +1,102 @@
-#include "get_next_line_bonus.h"
+#include "get_next_line.h"
 
-// servir a chercher le carcatere '\n' pour savoir si on retourne la string ou pas
-char	*ft_strchr(char *s, int c)
+/*
+ *
+ * FONCTION ICI POUR FAIRE TES BONUS AVEC LES LISTES CHAINEE
+ *	
+ *
+ *	remplace le strjoin par un vrai malloc et une vrai copie dans ton str 
+ *
+ *	 jai  deja retirer la fonction malloc du fichier utils donc il tu utilsiera cette espace
+ *
+ *	 pour faire une fonction pour gerer tes bonus avec  les listes chaineee
+ *
+ *	 va voir chat gpt il ta expliquee le principe
+ *
+ * */
+
+char	*ft_free(char *tmp, ssize_t read_bytes, char *final_string)
 {
-	if (!s && c != '\0')
-		return (0);
-	while (*s)
+	if (tmp && *tmp && read_bytes == 0)
 	{
-		if (*s == (unsigned char)c)
-			return ((char *)s);
-		s++;
+		final_string = ft_strdup(tmp);
+		free(tmp);
+		tmp = NULL;
+		return (final_string);
 	}
-	if (*s == (unsigned char)c)
-		return ((char *)s);
+	free(tmp);
 	return (NULL);
 }
 
-int	ft_return_position(char *str, char c)
+char	*ft_verify(char *str, char *buff, int read_bytes)
 {
-	int	i;
+	char	*ptr_free;
+	size_t	len;
 
-	i = 0;
-	while (str[i])
+	ptr_free = NULL;
+	buff[read_bytes] = '\0';
+	if (str)
 	{
-		if (str[i] == c)
-			return (i);
-		i++;
+		ptr_free = ft_strdup(str);
+		free(str);
+		len = ft_strlen(ptr_free) + ft_strlen(buff);
+		str = (char *)malloc((sizeof(char) * len) + 1);
+		if (str == NULL)
+			return (NULL);
+		ft_memcpy(str, ptr_free, ft_strlen(ptr_free) + 1);
+		str[ft_strlen(ptr_free)] = '\0';
+		ft_memcpy(ft_strchr(str, '\0'), buff, ft_strlen(buff));
+		str[len] = '\0';
+		free(ptr_free);
 	}
-	return (-1);
+	else if (!str)
+	{
+		free(str);
+		str = ft_strdup(buff);
+	}
+	return (str);
+}
+
+char	*ft_extract(char *tmp)
+{
+	char	*keep_tmp;
+
+	keep_tmp = ft_strdup(ft_strchr(tmp, '\n') + 1);
+	free(tmp);
+	tmp = keep_tmp;
+	return (tmp);
 }
 
 char	*get_next_line(int fd)
 {
-	static char *tmp;
+	static char	*tmp;
+	t_gnl		l_buff;
 	char		buff[BUFFER_SIZE + 1];
-	char		*keep_tmp = NULL;
-	char		*final_string = NULL;
+	char		*final_string;
 	ssize_t		read_bytes;
-	char		*ptr_free = NULL;
 
+	final_string = NULL;
 	read_bytes = 1;
 	while (read_bytes != 0)
 	{
-		if ((ft_strchr(tmp,'\n') != NULL))
+		if ((ft_strchr(tmp, '\n') != NULL))
 		{
-			final_string = ft_substr(tmp, 0, ft_return_position(tmp, '\n') + 1);
-			keep_tmp = ft_strdup(ft_strchr(tmp, '\n') + 1);
-			free(tmp);
-			tmp = keep_tmp;
+			final_string = ft_substr(tmp, 0, (ft_strlen(tmp)
+						- ft_strlen(ft_strchr(tmp, '\n'))) + 1);
+			tmp = ft_extract(tmp);
 			return (final_string);
 		}
-		read_bytes = read(fd, buff, BUFFER_SIZE);
+		read_bytes = read(fd, l_buff->buff, BUFFER_SIZE);
 		if (read_bytes <= 0)
-			break;
-		buff[read_bytes] = '\0';
-		if (tmp)
-		{
-			ptr_free = ft_strdup(tmp);
-			free(tmp);
-			tmp = ft_strjoin(ptr_free, buff);
-			free(ptr_free);
-		}
-		else if (!tmp)
-		{
-			free(tmp);
-			tmp = ft_strdup(buff);
-		}
+			break ;
+		tmp = ft_verify(tmp, buff, read_bytes);
 	}
-	if (tmp && *tmp && read_bytes == 0)
-    {
-        final_string = ft_strdup(tmp);
-        free(tmp);
-        tmp = NULL;
-        return (final_string);
-    }
-	free(tmp);
+	final_string = ft_free(tmp, read_bytes, final_string);
 	tmp = NULL;
-	return (NULL); // retour de la derniere ligne sans new line
+	return (final_string);
 }
 
-
-/*int main(void)
+int main(void)
 {
     int	fd1 = 0;
 	int fd2 = 0;
@@ -129,4 +145,4 @@ char	*get_next_line(int fd)
         return (1);
 	}
 	return (0);
-}*/
+}

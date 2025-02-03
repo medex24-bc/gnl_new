@@ -11,7 +11,7 @@
 # include <unistd.h> // pour read()
 
 char	*get_next_line(int fd);
-char	*ft_free(char *tmp, ssize_t read_bytes, char *final_string);
+char	*ft_free(char **tmp, ssize_t read_bytes, char *final_string);
 char	*ft_verify(char *str, char *buff, int read_bytes);
 char	*ft_extract(char *tmp);
 char	*ft_strjoin(char *s1, char *s2);

@@ -1,61 +1,4 @@
-#include "get_next_line.h"
-
-/*
- *
- * FONCTION ICI POUR FAIRE TES BONUS AVEC LES LISTES CHAINEE
- *	
- *
- *	remplace le strjoin par un vrai malloc et une vrai copie dans ton str 
- *
- *	 jai  deja retirer la fonction malloc du fichier utils donc il tu utilsiera cette espace
- *
- *	 pour faire une fonction pour gerer tes bonus avec  les listes chaineee
- *
- *	 va voir chat gpt il ta expliquee le principe
- *
- * */
-
-char	*ft_free(char *tmp, ssize_t read_bytes, char *final_string)
-{
-	if (tmp && *tmp && read_bytes == 0)
-	{
-		final_string = ft_strdup(tmp);
-		free(tmp);
-		tmp = NULL;
-		return (final_string);
-	}
-	free(tmp);
-	return (NULL);
-}
-
-char	*ft_verify(char *str, char *buff, int read_bytes)
-{
-	char	*ptr_free;
-	size_t	len;
-
-	ptr_free = NULL;
-	buff[read_bytes] = '\0';
-	if (str)
-	{
-		ptr_free = ft_strdup(str);
-		free(str);
-		len = ft_strlen(ptr_free) + ft_strlen(buff);
-		str = (char *)malloc((sizeof(char) * len) + 1);
-		if (str == NULL)
-			return (NULL);
-		ft_memcpy(str, ptr_free, ft_strlen(ptr_free) + 1);
-		str[ft_strlen(ptr_free)] = '\0';
-		ft_memcpy(ft_strchr(str, '\0'), buff, ft_strlen(buff));
-		str[len] = '\0';
-		free(ptr_free);
-	}
-	else if (!str)
-	{
-		free(str);
-		str = ft_strdup(buff);
-	}
-	return (str);
-}
+#include "get_next_line_bonus.h"
 
 char	*ft_extract(char *tmp)
 {
@@ -67,11 +10,91 @@ char	*ft_extract(char *tmp)
 	return (tmp);
 }
 
+char	*ft_free(char **tmp, ssize_t read_bytes, char *final_string)
+{
+	if (*tmp && **tmp && read_bytes == 0)
+	{
+		final_string = ft_strdup(*tmp);
+		free(*tmp);
+		*tmp = NULL;
+		return (final_string);
+	}
+	if (ft_strchr(*tmp, '\n') != NULL)
+	{
+		final_string = ft_substr(*tmp, 0, (ft_strlen(*tmp)
+					- ft_strlen(ft_strchr(*tmp, '\n'))) + 1);
+		*tmp = ft_extract(*tmp);
+		return (final_string);
+	}
+	free(*tmp);
+	return (NULL);
+}
+
+char	*ft_verify(char *tmp, char *buff, int read_bytes)
+{
+	char	*ptr_free;
+	size_t	len;
+
+	ptr_free = NULL;
+	buff[read_bytes] = '\0';
+	if (tmp)
+	{
+		ptr_free = ft_strdup(tmp);
+		free(tmp);
+		len = ft_strlen(ptr_free) + ft_strlen(buff);
+		tmp = (char *)malloc((sizeof(char) * len) + 1);
+		if (tmp == NULL)
+			return (NULL);
+		ft_memcpy(tmp, ptr_free, ft_strlen(ptr_free) + 1);
+		tmp[ft_strlen(ptr_free)] = '\0';
+		ft_memcpy(ft_strchr(tmp, '\0'), buff, ft_strlen(buff));
+		tmp[len] = '\0';
+		free(ptr_free);
+	}
+	else if (!tmp)
+	{
+		free(tmp);
+		tmp = ft_strdup(buff);
+	}
+	return (tmp);
+}
+
+t_gnl	*ft_multiple_fd(int fd, t_gnl *ptr)
+{
+	t_gnl	*lst;
+	bool	flag;		
+
+	flag = false;
+	lst = (t_gnl *)malloc(sizeof(t_gnl));
+	if (lst == NULL)
+		return (NULL);
+	ptr = lst;
+	while (ptr != NULL)
+	{
+		if (ptr->fd = fd)
+		{
+			flag = true;
+			return (ptr);
+		}
+		ptr = ptr->next;
+	}
+	if (ptr == NULL && flag == true)
+	{
+		ptr = malloc(sizeof(t_gnl));
+		if (ptr == NULL)
+			return (NULL);
+		ptr->fd = fd;
+		ptr->next = NULL;
+		return (ptr);
+	}
+	return (NULL);
+}
+
+
 char	*get_next_line(int fd)
 {
 	static char	*tmp;
-	t_gnl		l_buff;
-	char		buff[BUFFER_SIZE + 1];
+	t_gnl		*ptr;
 	char		*final_string;
 	ssize_t		read_bytes;
 
@@ -80,20 +103,16 @@ char	*get_next_line(int fd)
 	while (read_bytes != 0)
 	{
 		if ((ft_strchr(tmp, '\n') != NULL))
-		{
-			final_string = ft_substr(tmp, 0, (ft_strlen(tmp)
-						- ft_strlen(ft_strchr(tmp, '\n'))) + 1);
-			tmp = ft_extract(tmp);
-			return (final_string);
-		}
-		read_bytes = read(fd, l_buff->buff, BUFFER_SIZE);
+			return (ft_free(&tmp, read_bytes, final_string));
+		read_bytes = read(fd, ptr->buff, BUFFER_SIZE);
 		if (read_bytes <= 0)
 			break ;
-		tmp = ft_verify(tmp, buff, read_bytes);
+
+		ptr = ft_multiple_fd(fd, ptr);
+
+		tmp = ft_verify(tmp, ptr->buff, read_bytes);
 	}
-	final_string = ft_free(tmp, read_bytes, final_string);
-	tmp = NULL;
-	return (final_string);
+	return (ft_free(&tmp, read_bytes, final_string));
 }
 
 int main(void)

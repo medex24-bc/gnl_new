@@ -6,6 +6,7 @@
 #endif
 
 #include <stdio.h>
+#include <stdbool.h>
 #include <fcntl.h> // pour open()
 #include <stdlib.h> // pour free() & malloc
 #include <unistd.h> // pour read()

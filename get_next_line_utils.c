@@ -77,25 +77,5 @@ void	*ft_memcpy(void *dst, void *src, size_t n)
 	}
 	return (dst);
 }
-
-char	*ft_strjoin(char *s1, char *s2)
-{
-	char	*final_string;
-
-	if (s1 == NULL && s2 == NULL)
-		return (NULL);
-	if (s1 == NULL)
-		return ((char *)s2);
-	if (s2 == NULL)
-		return ((char *)s1);
-	final_string = (char *)malloc((ft_strlen(s1) + ft_strlen(s2)) + 1);
-	if (final_string == NULL)
-		return (NULL);
-	ft_memcpy(final_string, s1, ft_strlen(s1));
-	ft_memcpy(final_string + ft_strlen(s1), s2, ft_strlen(s2));
-	final_string[ft_strlen(s1) + ft_strlen(s2)] = '\0';
-	return (final_string);
-}
-
-
+	
 

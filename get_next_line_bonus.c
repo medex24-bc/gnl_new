@@ -27,9 +27,12 @@ char	*ft_free(char **tmp, ssize_t read_bytes, char *final_string)
 		return (final_string);
 	}
 	free(*tmp);
+	*tmp = NULL;
 	return (NULL);
 }
 
+// si tmp est deja plein, sa met dans ptr_free ce qu'il y a dans tmp
+// ensuite ca join ptr_free + ptr value de buff dans tmp
 char	*ft_verify(char *tmp, char *buff, int read_bytes)
 {
 	char	*ptr_free;
@@ -59,72 +62,67 @@ char	*ft_verify(char *tmp, char *buff, int read_bytes)
 	return (tmp);
 }
 
+
 t_gnl	*ft_multiple_fd(int fd, t_gnl *ptr)
 {
-	t_gnl	*lst;
-	bool	flag;		
+	t_gnl	*current;
 
-	flag = false;
-	lst = (t_gnl *)malloc(sizeof(t_gnl));
-	if (lst == NULL)
+	current = ptr;
+	while (current != NULL)
+	{
+		if (current->fd == fd)
+			return (current);
+		current = current->next;
+	}
+	current = (t_gnl *)malloc(sizeof(t_gnl));
+	if (current == NULL)
 		return (NULL);
-	ptr = lst;
-	while (ptr != NULL)
-	{
-		if (ptr->fd = fd)
-		{
-			flag = true;
-			return (ptr);
-		}
-		ptr = ptr->next;
-	}
-	if (ptr == NULL && flag == true)
-	{
-		ptr = malloc(sizeof(t_gnl));
-		if (ptr == NULL)
-			return (NULL);
-		ptr->fd = fd;
-		ptr->next = NULL;
-		return (ptr);
-	}
-	return (NULL);
+	current->fd = fd;
+	current->next = NULL;
+	return (current);
 }
 
-
+// IMPORTANT: la seul variable qui sera statique dans le bonus est la variable qui garde la tete de lecture de la liste chainee PLUS BESOIN DE TMP
+// PUISQUE LES LISTES CHAINEE PRESERVE LES ALLOCATIONS JUSQUA CE QUE TU LES LIBERES UNE APRES LAUTRE
 char	*get_next_line(int fd)
 {
-	static char	*tmp;
-	t_gnl		*ptr;
-	char		*final_string;
-	ssize_t		read_bytes;
+	static t_gnl	*ptr;
+	t_gnl			*new;
+	char			*tmp;
+	char			*final_string;
+	ssize_t			read_bytes;
 
 	final_string = NULL;
 	read_bytes = 1;
+	tmp = NULL;
+	new = NULL;
+
+	if (ptr == NULL)
+		ptr = ft_multiple_fd(fd, ptr);
+	new = ft_multiple_fd(fd, ptr);
 	while (read_bytes != 0)
 	{
 		if ((ft_strchr(tmp, '\n') != NULL))
 			return (ft_free(&tmp, read_bytes, final_string));
-		read_bytes = read(fd, ptr->buff, BUFFER_SIZE);
+		read_bytes = read(fd, new->buff, BUFFER_SIZE);
 		if (read_bytes <= 0)
 			break ;
-
-		ptr = ft_multiple_fd(fd, ptr);
-
-		tmp = ft_verify(tmp, ptr->buff, read_bytes);
+		tmp = ft_verify(tmp, new->buff, read_bytes);
 	}
 	return (ft_free(&tmp, read_bytes, final_string));
 }
 
-int main(void)
+/*int main(void)
 {
     int	fd1 = 0;
 	int fd2 = 0;
 	int fd3 = 0;
 	char *string = NULL;
 
-    fd1 = open("./files/file1.txt", O_RDONLY);
-	fd2 = open("./files/file2.txt", O_RDONLY);
-	fd3 = open("./files/file3.txt", O_RDONLY);
+    fd1 = open("./files/file2.txt", O_RDONLY);
+	fd2 = open("./files/file3.txt", O_RDONLY);
+	fd3 = open("./files/file4.txt", O_RDONLY);
+
 	if (fd1 != -1)
 	{
 		string = get_next_line(fd1);
@@ -164,4 +162,4 @@ int main(void)
         return (1);
 	}
 	return (0);
-}
+}*/
